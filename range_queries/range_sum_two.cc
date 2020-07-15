@@ -3,6 +3,12 @@
 using namespace std;
 using ll = long long;
 
+// Fenwick tree or Binary Indexed Tree BIT is a data structure that:
+// - Calculates the value of a function f in the given range [l,r] (f(A[l]+...+A[r])) in O(log n);
+// - Updates the value of an element A in O(log n);
+// - Requires O(n) memory (same as A).
+// https://en.wikipedia.org/wiki/Fenwick_tree
+
 ll LSB(ll n) { return n&(-n); }
 struct fenwick {
   fenwick(ll n) : F(n+1, 0) {}
