@@ -13,7 +13,7 @@ ll LSB(ll n) { return n&(-n); }
 struct fenwick {
   fenwick(ll n) : F(n+1, 0) {}
   void add (ll i, ll x) {
-    while(i < F.size()) {
+    while(i < (ll) F.size()) {
       F[i] += x;
       i += LSB(i);
     }
