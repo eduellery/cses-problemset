@@ -1,0 +1,39 @@
+I_X is the indicator of variable for X.
+I_X is 1 if X is true and 0 if X is false.
+The expected value of an indicator variable is just the probability the event is true.
+E[I_X] = 1*P(X) + 0*(1-P(X)) = P(X).
+
+We want to find E[number of empty squares].
+Let I_{r,c} be the indicator variable for wheter square {r,c} is empty.
+Number of empty squares = \sum_r \sum_c I_{r,c}.
+So E[number of empty squares] = E[\sum_r \sum_c I_{r,c}].
+By linearity of expectation, this is \sum_r \sum_c E[I_{r,c}].
+This is \sum_r \sum_c P(square (r,c) is empty).
+
+So we just need to find the probability that each square is empty.
+How do we do that? A square is empty if no robots end on it.
+Let Pk[ab][rc] be the probability that the robot that started on (a,b) ends on (r,c) (after k steps).
+1-Pk[ab][rc] is the probability that the robot from (a,b) does *not* end on (r,c).
+We need *every* robot to avoid ending on (r,c), and they will all move independently, so
+the probability that every robot does not end on (r,c) is just the product of the individual probabilities.
+
+Then the probability that (r,c) is empty is \product_{ab} (1-Pk[ab][rc]).
+So the answer is \sum_{rc} (\product_{ab} 1-Pk[ab][rc]).
+
+How do we compute Pk? Matrix exponentiation.
+Let P[ab][rc] be the probability that (a,b) ends up on (r,c) in one step.
+This is basically the adjacency matrix of the graph.
+Each corner has 1/2 probability to move to each adjacent square, for example.
+Then P^k[ab][rc] is the probability that (a,b) ends up on (r,c) in K steps.
+This is for basically the same reason as previous matrix exponentiation worked.
+(P^a P^b)[ab][rc] = \sum_k P^a[ab][k] * P^b[k][rc] is the definition of matrix multiplication.
+You can also think of this as brute forcing over the middle vertex K.
+What is the probability of going from (a,b) to (r,c) in A+B steps?
+After A steps you are at some vertex K.
+So the probability of getting to (r,c) in A+B steps is the sum over each possible "middle" vertex K
+of the probability that you get to K in A steps and then from K to (r,c) in further B steps.
+
+Final solution will be:
+1) Compute P based on the chessboard; 
+2) Use matrix exponentiation to compute Pk;
+3) Compute the answer as \sum_{rc} (\product_{ab} 1-Pk[ab][rc]).
