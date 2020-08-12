@@ -1,0 +1,40 @@
+Lemma: XOR(A,B) = 0 iff A = B.
+If A != B, they differ at some bit and that bit will be on.
+
+Lemma: if the XOR of A_1 A_2 ... A_n has an on bit B = 2^K, at least one of the A_i >= B.
+Since at least one of the terms has to have B on for it to be on in the XOR.
+
+Base case: no heaps. XOR of nothing is 0, and no heaps is a losing position.
+
+First direction: If the XOR is 0, the position is losing.
+A position is losing iff there are no moves to a losing position (definition of "losing position").
+Say our move is taking a pile with A sticks and leaving B sticks. The new XOR is the old XOR (0) ^ A ^ B.
+So this is 0 iff A^B is 0, but A^B is 0 iff A = B. Given we have to take some sticks, B has to be less than A.
+The new XOR can't be 0.
+
+Second direction: if the current XOR is non-zero, the position is winning.
+A position is winning iff there is a move to a losing position (definition of "losing position").
+So we need to find a move that makes XOR 0.
+Let X be the current XOR. Write X in binary and let B = 2^K be the highest-value "1" in the
+binary representation of X (there must be at least one "1", since X is non-zero).
+There must be a pile of size P >= B, since for a bit to be on in the XOR it must be on in at least one term.
+Take away B-(X-B) = 2B - X sticks from that pile. Three subclaims:
+1) The pile has enough sticks to take away i.e. P >= B-(X-B). Since X >= B, B-(X-B) <= B <= P.
+2) We are taking away a positive number of sticks. Because X-B is a sum of smaller powers of 2, B > X-B, so B-(X-B) > 0.
+3) New XOR is 0. There were P sticks and now there are P-(2B-X). So the new XOR is X^P^(P-2B+X). P^P ^ (X^X) ^ (-2B) = 0.
+
+
+Examples:
+
+XOR(4,1) = 5
+4 = 0b100
+1 = 0b001
+---------
+    0b101
+
+XOR(3,5,6) = 0
+3 = 0b011
+5 = 0b101
+6 = 0b110
+---------
+    0b000
