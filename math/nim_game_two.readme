@@ -1,0 +1,38 @@
+A pile with 4 stones do nothing. If you move in it, I can just move it to 0 stones.
+Now you are in the same position without that pile.
+Same thing for 8 stones, since I can respond by moving it to 4 stones.
+Same thing for any multiple of 4.
+
+Any pile of 4A+B stones is equivalent to a pile of B stones.
+Since any move you make I can respond by making it 4(A-1)+B and leave you in the same position.
+
+So all pile sizes can be reduced mod 4.
+
+Now this is just Nim, since we can empty any pile in 1 move.
+So: XOR together all the pile sizes mod 4.
+
+GENERAL SOLUTION
+Any impartial game has a "Nim-value".
+If you have independent games with Nim-values A_1 A_2 A_3 ... A_n,
+the combined game (where you move in any one of them) has a Nim-value of XOR(A_1, ..., A_n).
+A position is winning iff its Nim-value is non-zero.
+The Nim-value of a position is the MEX of the Nim-values of the positions you can move to.
+MEX = "minimum excluded element", the first number (starting with 0) that does *not* appear.
+MEX(1, 2, 3) = 0.
+MEX(0, 2, 1, 5) = 3.
+
+Let f(n) be the Nim-value for a pile of size N in our game.
+f(n) = MEX(f(n-1), f(n-2), f(n-3)), since the moves are taking 1 stick, 2 sticks or 3 sticks.
+f(0) = MEX([]) = 0
+f(1) = MEX(0) = 1
+f(2) = MEX(0, 1) = 2
+f(3) = MEX(0, 1, 2) = 3
+f(4) = MEX(1, 2, 3) = 0 (!)
+f(5) = MEX(0, 2, 3) = 1
+f(6) = MEX(1, 0, 3) = 2
+f(7) = MEX(2, 1, 0) = 3
+f(8) = MEX(3, 2, 1) = 0 (!)
+
+Directly computing this is too slow since pile sizes are up to 10^9,
+but we can spot the pattern f(n) = n%4.
+
