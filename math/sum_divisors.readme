@@ -1,0 +1,52 @@
+sum_n sum_{d divisor of n} d.
+
+Invert to solve this.
+\sum_{d=1}^n \sum_{x multiple of d} d.
+So we have a solution that runs in O(n lg n).
+Unfortunatelly n is 10^12...
+
+How many multiples of d <= n are there?
+How many integers A with A*d <= n?
+A*d <= n means A <= n/d. So A=1, A=2, ..., A=floor(n/d) all work.
+There are floor(n/d) multiples of d <= n.
+
+So we need to compute \sum_{d=1}^n d * (n/d).
+This is an O(n) solution.
+
+Let R = sqrt(n) = 10^6.
+Note on of d and (n/d) is <= R.
+
+Split the sum:
+S1 = \sum_{d=1}^R d * (n/d).
+S2 = \sum_{d=R+1}^n d * (n/d).
+
+S1 we can directly compute in O(R).
+
+S2 all the n/d terms are < R. Sum over n/d instead of d.
+\sum_{n/d=1}^R n/d * (\sum of d for this value of n/d).
+Which d have floor(n/d) = A?
+
+A <= n/d < A+1.
+A*d <= n < (A+1)*d.
+n < (A+1)*d gives d > n/(A+1).
+So floor (n/d) = A will include all d in (n/(A+1), n/A].
+To avoid double counting, we also need d > R (since the terms with d <= R are in S1).
+
+So S2 = \sum_{A=1}^R A * (\sum_{d for A} d).
+
+How do we compute the inner sum? It is over some interval of integers LO to HI.
+LO + LO+1 + LO+2 + ... + HI.
+
+Let S(n) = 1 + 2 + ... + n = n*(n+1)/2.
+LO + LO+1 + LO+2 + ... + HI = S(HI) - S(LO-1).
+
+For a given A, we have LO = max(R+1, n/(A+1)+1) and HI = n/A.
+Because of the max (which is to avoid double counting terms from S1),
+we might have an empty interval! In which case ignore this value of A.
+
+So (\sum_{d for A} d) = S(HI) - S(LO-1).
+So S2 = \sum_{A=1}^R A * (LO<=HI ? S(HI)-S(LO-1) : 0).
+
+Our answer is the sum of S1 and S2.
+Note that we are working modulo 10^9+7.
+Also numbers are up to 10^12, so we need to reduce the number *before* multiplying them!
