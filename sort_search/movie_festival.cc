@@ -5,6 +5,7 @@
 using namespace std;
 using ll = int64_t;
 using pll = pair<ll, ll>;
+
 int main() {
   ll n = 0;
   cin >> n;
